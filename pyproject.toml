@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "code"
+version = "0.1.0"
+description = ""
+authors = ["Deep"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+fastapi = "^0.63.0"
+uvicorn = "^0.13.4"
+pip = "^21.0.1"
+SQLAlchemy = "^1.4.5"
+mysql-connector-python = "^8.0.23"
+bcrypt = "^3.2.0"
+pytest = "^6.2.3"
+PyJWT = "^2.0.1"
+
+[tool.poetry.dev-dependencies]
+pylint = "^2.7.4"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
