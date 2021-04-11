@@ -13,6 +13,8 @@ SQLAlchemy = "^1.4.5"
 mysql-connector-python = "^8.0.23"
 bcrypt = "^3.2.0"
 pytest = "^6.2.3"
+mypy = "^0.812"
+python-multipart = "^0.0.5"
 PyJWT = "^2.0.1"
 
 [tool.poetry.dev-dependencies]
