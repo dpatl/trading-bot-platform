@@ -13,6 +13,8 @@ from database.database import engine, SessionLocal
 from schemas.schemas import User, TokenData
 from datetime import timedelta
 from utils.utils import create_access_token
+from models.enums import Roles
+from typing import List
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -53,6 +55,16 @@ async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = De
         raise credentials_exception
     return user
 
+
+def check_user_has_permissions(db: Session, user: schemas.User, roleIds: List[Roles]):
+    if (not (crud.check_user_roles(db=db, user=user, roleIds=roleIds))):
+            raise HTTPException(status_code=403, detail="Forbidden")
+    return True
+
+def check_user_has_permissions_or_same_user(db: Session, user: schemas.User, roleIds: List[Roles], user_id: int):
+    if (not (user.id != user_id or crud.check_user_roles(db=db, user=user, roleIds=roleIds))):
+            raise HTTPException(status_code=403, detail="Forbidden")
+    return True
 
 @app.get("/")
 def healthcheck():
@@ -98,6 +110,8 @@ async def create_new_bot(bot: schemas.BotMetadataBase, current_user: User = Depe
 @app.get("/bots")
 async def get_all_bots(current_user: User = Depends(get_current_user)
                         , db: Session = Depends(get_db)):
+
+    check_user_has_permissions(db=db, user=current_user, roleIds=[Roles.ADMIN,Roles.DEVELOPER,Roles.TEST])                
     return crud.get_all_bots(db=db)
 
 
@@ -105,6 +119,13 @@ async def get_all_bots(current_user: User = Depends(get_current_user)
 async def get_bot_by_id(bot_id, current_user: User = Depends(get_current_user)
                          , db: Session = Depends(get_db)):
     return crud.get_bot_by_id(db=db, bot_id=bot_id)
+
+@app.get("/bots/byUser/{user_id}")
+async def get_bots_by_user_id(user_id, current_user: User = Depends(get_current_user)
+                         , db: Session = Depends(get_db)):
+    
+
+    return crud.get_bots_by_user_id(db=db, user_id=user_id)  
 
 
 if __name__ == "__main__":

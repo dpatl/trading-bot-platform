@@ -42,3 +42,19 @@ class BotMetadata(BotMetadataBase):
 
     class Config:
         orm_mode = True
+
+class RoleId(BaseModel):
+    id: int 
+
+class Role(RoleId):
+    role_name: str
+
+    class Config:
+        orm_mode = True
+
+class User_Role(BaseModel):
+    user_id:int
+    role_id:int
+
+    class Config:
+        orm_mode = True

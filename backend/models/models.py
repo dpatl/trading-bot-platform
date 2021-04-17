@@ -21,3 +21,13 @@ class User(Base):
     email = Column(String(100), nullable=False, unique = True)    
     password = Column(String(200), nullable=False)
     bots = relationship("BotMetadata")
+
+class Role(Base):
+    __tablename__ = 'roles'
+    id = Column(Integer, primary_key=True,index=True)
+    role_name = Column(String, nullable=False, unique=True)
+
+class User_Role(Base):
+    __tablename__ = 'user_roles'
+    user_id = Column(Integer, primary_key=True, nullable=False)
+    role_id = Column(Integer, primary_key=True, nullable=False)
